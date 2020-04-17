@@ -1,5 +1,4 @@
-﻿using Harmony;
-using Rocket.Core.Logging;
+﻿using Rocket.Core.Logging;
 using Rocket.Core.Plugins;
 using SDG.Unturned;
 using System;
@@ -7,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using HarmonyLib;
 using Rocket.API.Collections;
 
 namespace ExtraConcentratedJuice.AntiLock
@@ -19,13 +19,9 @@ namespace ExtraConcentratedJuice.AntiLock
         {
             instance = this;
 
-            HarmonyInstance harmony = HarmonyInstance.Create("pw.cirno.extraconcentratedjuice");
+            var harmony = new Harmony("pw.cirno.extraconcentratedjuice");
 
-            var orig = typeof(VehicleManager).GetMethod("askVehicleLock", BindingFlags.Instance | BindingFlags.Public);
-            var pre = typeof(AskVehicleLockOverride).GetMethod("Prefix", BindingFlags.Static | BindingFlags.NonPublic);
-            var post = typeof(AskVehicleLockOverride).GetMethod("Postfix", BindingFlags.Static | BindingFlags.Public);
-
-            harmony.Patch(orig, new HarmonyMethod(pre), new HarmonyMethod(post));
+            harmony.PatchAll();
 
             Logger.Log("Loaded AntiLock! Default locks allocated: " + Configuration.Instance.defaultLocks);
             Logger.Log("Groups:");

@@ -7,10 +7,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using HarmonyLib;
 using UnityEngine;
 
 namespace ExtraConcentratedJuice.AntiLock
 {
+    [HarmonyPatch(typeof(VehicleManager))]
+    [HarmonyPatch("askVehicleLock")]
     internal static class AskVehicleLockOverride
     {
         internal static bool Prefix(CSteamID steamID)
@@ -51,7 +54,5 @@ namespace ExtraConcentratedJuice.AntiLock
 
             return true;
         }
-
-        internal static void Postfix() { /* lol */}
     }
 }
